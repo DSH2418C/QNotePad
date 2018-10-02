@@ -2,8 +2,11 @@
 
 #include <QMenu>
 #include<QMenuBar>
+#include <QToolBar>
+#include <QStatusBar>
 
 #include <QDebug>
+
 
 //对象创建函数[静态]
 QNotePad* QNotePad::NewInstance()
@@ -21,6 +24,7 @@ QNotePad* QNotePad::NewInstance()
 
 
 QNotePad::QNotePad()
+    :m_mainEditor(this)
 {}
 
 
@@ -30,6 +34,9 @@ bool QNotePad::construct()
     bool ret = true;
 
     ret = ret && initMenuBar();
+    ret = ret && initToolBar();
+    ret = ret && initStatusBar();
+    ret = ret && initMainEditor();
 
     return ret;
 }
@@ -48,6 +55,70 @@ bool QNotePad::initMenuBar()
     ret = ret && initFormatMenu(mb);
     ret = ret && initViewMenu(mb);
     ret = ret && initHelpMenu(mb);
+
+    return ret;
+}
+
+
+// 创建工具栏
+bool QNotePad::initToolBar()
+{
+    bool  ret = true;
+
+    // 创建ToolBar并插入工具栏区域
+    QToolBar* tb = addToolBar("Tool Bar");
+
+    tb->setIconSize(QSize(16, 16));
+
+    ret = ret && initFileToolItem(tb);
+    tb->addSeparator();
+
+    ret = ret && initEditToolItem(tb);
+    tb->addSeparator();
+
+    ret = ret && initFormatToolItem(tb);
+    tb->addSeparator();
+
+    return ret;
+}
+
+
+// 创建状态栏
+bool QNotePad::initStatusBar()
+{
+    bool ret = true;
+
+    QStatusBar* sb = statusBar();
+
+    QLabel* label = new QLabel("HSD");
+
+    if( label != NULL )
+    {
+        m_statusLabel.setMinimumWidth(180);
+        m_statusLabel.setAlignment(Qt::AlignCenter);
+        m_statusLabel.setText("Ln: 1  Col: 1");
+
+        label->setMinimumWidth(180);
+        label->setAlignment(Qt::AlignCenter);
+
+        sb->addPermanentWidget(&m_statusLabel);
+        sb->addPermanentWidget(label);
+    }
+    else
+    {
+        ret = false;
+    }
+
+    return ret;
+}
+
+
+// 创建文本编辑组件
+bool QNotePad::initMainEditor()
+{
+    bool ret = true;
+
+    setCentralWidget(&m_mainEditor);
 
     return ret;
 }
@@ -318,21 +389,182 @@ bool QNotePad::initHelpMenu(QMenuBar* mb)
 }
 
 
-// 创建菜单项
-bool QNotePad::makeAction(QAction*& action, QString text, int key, QWidget* parent)
+// file类快捷工具
+bool QNotePad::initFileToolItem(QToolBar* tb)
 {
     bool ret = true;
 
+    QAction* action = nullptr;
+
+    ret = ret && makeAction(action, "New", ":/ico/new.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Open", ":/ico/open.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Save", ":/ico/save.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Save As", ":/ico/saveas.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Print", ":/ico/print.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    return ret;
+}
+
+
+// edit类快捷工具
+bool QNotePad::initEditToolItem(QToolBar* tb)
+{
+    bool ret = true;
+
+    QAction* action = nullptr;
+
+    ret = ret && makeAction(action, "Undo", ":/ico/undo.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Redo", ":/ico/redo.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Cut", ":/ico/cut.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Copy", ":/ico/copy.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Paste", ":/ico/paste.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Find", ":/ico/find.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Replace", ":/ico/replace.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Goto", ":/ico/goto.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    return ret;
+}
+
+
+// forma类快捷工具
+bool QNotePad::initFormatToolItem(QToolBar* tb)
+{
+    bool ret = true;
+
+    QAction* action = NULL;
+
+    ret = ret && makeAction(action, "Auto Wrap", ":/ico/wrap.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Font", ":/ico/font.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    return ret;
+}
+
+
+// view类快捷工具
+bool QNotePad::initViewToolItem(QToolBar* tb)
+{
+    bool ret = true;
+
+    QAction* action = NULL;
+
+    ret = ret && makeAction(action, "Tool Bar", ":/ico/tool.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    ret = ret && makeAction(action, "Status Bar", ":/ico/status.png", tb);
+    if( ret )
+    {
+        tb->addAction(action);
+    }
+
+    return ret;
+}
+
+
+// 创建菜单项
+bool QNotePad::makeAction(QAction*& action, QString text, int key, QWidget* parent)
+{
     action = new QAction(text, parent);
 
-    if( action != nullptr )
+    bool ret = (action != nullptr);
+
+    if( ret )
     {
         // 设置快捷键
         action->setShortcut(QKeySequence(key));
     }
-    else
+
+    return ret;
+}
+
+
+// 创建快捷项
+bool QNotePad::makeAction(QAction*& action, QString tip, QString iconPath, QWidget* parent)
+{
+    bool ret = true;
+
+    action = new QAction("", parent);
+
+    ret = (action != nullptr);
+
+    if( action )
     {
-        ret = false;
+        action->setToolTip(tip);
+        action->setIcon(QIcon(iconPath));
     }
 
     return ret;

@@ -29,3 +29,6 @@ SOURCES += \
 
 HEADERS += \
         QNotePad.h
+
+RESOURCES += \
+    res.qrc

@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ico/copy.png</file>
+        <file>ico/cut.png</file>
+        <file>ico/find.png</file>
+        <file>ico/font.png</file>
+        <file>ico/goto.png</file>
+        <file>ico/new.png</file>
+        <file>ico/open.png</file>
+        <file>ico/paste.png</file>
+        <file>ico/print.png</file>
+        <file>ico/redo.png</file>
+        <file>ico/replace.png</file>
+        <file>ico/save.png</file>
+        <file>ico/saveas.png</file>
+        <file>ico/status.png</file>
+        <file>ico/tool.png</file>
+        <file>ico/undo.png</file>
+        <file>ico/wrap.png</file>
+    </qresource>
+</RCC>
